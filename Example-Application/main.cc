@@ -12,6 +12,15 @@ int main(int argc, char* argv[])
     cc_tokenizer::string_character_traits<char>::int_type i, j;
     try
     {
+        std::cout<<"Original text to parse..."<<std::endl;
+	std::cout<<csv.c_str();
+
+	std::cout<<"Remove this line which is the 2nd line... "<<parser.get_line_by_number(2).c_str()<<std::endl; 
+
+        parser.remove_line_by_number(2);
+
+	std::cout<<"Rest of the text one line at a time..."<<std::endl;
+
         for (i = 0; i < parser.get_total_number_of_lines(); i++)
 	{
             cc_tokenizer::String<char> line = parser.get_line_by_number(i + 1);

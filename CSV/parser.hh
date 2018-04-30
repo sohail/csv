@@ -82,6 +82,34 @@ class csv_parser<cc_tokenizer::String<char>, char> : public cc_tokenizer::parser
 	  return cc_tokenizer::String<char>(str.data() + current_line_offset, current_line_size - cc_tokenizer::String<char>(GRAMMAR_END_OF_LINE_MARKER).size());
       }
 
+      cc_tokenizer::string_character_traits<char>::int_type remove_line_by_number(cc_tokenizer::string_character_traits<char>::int_type n)
+      {
+          cc_tokenizer::string_character_traits<char>::int_type ret = n;
+   
+          if (n && !(n > get_total_number_of_lines())) 
+	  {
+	      cc_tokenizer::String<char> line = get_line_by_number(n);
+	      if (line.size())
+	      {
+		  //std::cout<<str.erase(current_line_offset, line.size() + cc_tokenizer::String<char>(GRAMMAR_END_OF_LINE_MARKER).size()).c_str();
+		  cc_tokenizer::String<char> foo = str.erase(current_line_offset, line.size() + cc_tokenizer::String<char>(GRAMMAR_END_OF_LINE_MARKER).size());
+
+		  //std::cout<<foo.c_str();
+
+		  reset(LINES);
+		  get_total_number_of_lines();
+
+		  //std::cout<<"--> "<<get_line_by_number(4).c_str()<<std::endl;
+	      }
+	      else
+	      {
+	          ret = 0;
+	      }
+	  }
+           
+          return ret;
+      }
+
       cc_tokenizer::String<char> get_line_by_number(cc_tokenizer::string_character_traits<char>::int_type n)
       {
           cc_tokenizer::String<char> ret;
