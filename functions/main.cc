@@ -1,17 +1,18 @@
 /* main.cc */
 
-#include "ala_exception.hh"
+#include "cooked_read.hh"
+#include "cooked_rand.hh"
 
-int foo(void) throw(ala_exception) {
+int n[4] = {-1, -1, -1, -1};
 
-   throw ala_exception("Hello World");
+int main(int argc, char* argv[]) 
+{
+    cooked_rand(n, 4, 1, 5);
 
-   return 0;
-}
+    for (int i = 0; i < sizeof(n)/sizeof(int); i++)
+    {
+        std::cout<<"-> "<<n[i]<<std::endl;
+    }
 
-int main(int argc, char* argv[]) {
-
-   foo();
-
-   return 0;
+    return 0;
 }
