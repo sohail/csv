@@ -3,7 +3,7 @@
 #include "cooked_read.hh"
 #include "cooked_rand.hh"
 
-int n[4] = {-1, -1, -1, -1};
+int n[4] = {0, 0, 0, 0};
 
 int main(int argc, char* argv[]) 
 {
