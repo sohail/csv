@@ -3,12 +3,12 @@
 
 #include "../parser/parser.hh" 
 
-#ifndef		CCTOKENIZER_CSV_PARSER_HH
-#define		CCTOKENIZER_CSV_PARSER_HH
+#ifndef		CC_TOKENIZER_CSV_PARSER_HH
+#define		CC_TOKENIZER_CSV_PARSER_HH
 
-#define		GRAMMAREND_OFTOKEN_MARKER	","
+#define		GRAMMAR_END_OF_TOKEN_MARKER	","
 /* On a Windows machine it is "\n\r" */
-#define		GRAMMAREND_OF_LINE_MARKER	"\n"
+#define		GRAMMAR_END_OF_LINE_MARKER	"\n"
 
 // reset() method, argument values  
 #define   	LINES 				0
@@ -79,7 +79,7 @@ class csv_parser<cc_tokenizer::String<char>, char> : public cc_tokenizer::parser
 	      TODO, put the correct size of GRAMMREND_OF_LINE_MARKER here instead of 1 
 	   */ 
           //return cc_tokenizer::String<char>(str.data() + current_line_offset, current_line_size - 1);
-	  return cc_tokenizer::String<char>(str.data() + current_line_offset, current_line_size - cc_tokenizer::String<char>(GRAMMAREND_OF_LINE_MARKER).size());
+	  return cc_tokenizer::String<char>(str.data() + current_line_offset, current_line_size - cc_tokenizer::String<char>(GRAMMAR_END_OF_LINE_MARKER).size());
       }
 
       cc_tokenizer::string_character_traits<char>::int_type remove_line_by_number(cc_tokenizer::string_character_traits<char>::int_type n)
@@ -92,7 +92,7 @@ class csv_parser<cc_tokenizer::String<char>, char> : public cc_tokenizer::parser
 	      if (line.size())
 	      {
 		  //std::cout<<str.erase(current_line_offset, line.size() + cc_tokenizer::String<char>(GRAMMAREND_OF_LINE_MARKER).size()).c_str();
-		  cc_tokenizer::String<char> foo = str.erase(current_line_offset, line.size() + cc_tokenizer::String<char>(GRAMMAREND_OF_LINE_MARKER).size());
+		  cc_tokenizer::String<char> foo = str.erase(current_line_offset, line.size() + cc_tokenizer::String<char>(GRAMMAR_END_OF_LINE_MARKER).size());
 
 		  //std::cout<<foo.c_str();
 
@@ -206,12 +206,12 @@ class csv_parser<cc_tokenizer::String<char>, char> : public cc_tokenizer::parser
       {
          cc_tokenizer::string_character_traits<char>::int_type ret = cc_tokenizer::string_character_traits<char>::eof();
 
-	 typename cc_tokenizer::String<char>::size_type pos_begin = str.find(GRAMMAREND_OF_LINE_MARKER, current_line_offset + current_line_size);
+	 typename cc_tokenizer::String<char>::size_type pos_begin = str.find(GRAMMAR_END_OF_LINE_MARKER, current_line_offset + current_line_size);
 
 	 if (pos_begin != cc_tokenizer::String<char>::npos) 
 	 {
 	    current_line_offset = current_line_offset + current_line_size;
-	    current_line_size = (pos_begin - current_line_offset) + cc_tokenizer::String<char>(GRAMMAREND_OF_LINE_MARKER).size();
+	    current_line_size = (pos_begin - current_line_offset) + cc_tokenizer::String<char>(GRAMMAR_END_OF_LINE_MARKER).size();
 	    current_line_number = current_line_number + cc_tokenizer::string_character_traits<char>::int_type(1);
 
 	    reset(TOKENS);
@@ -244,7 +244,7 @@ class csv_parser<cc_tokenizer::String<char>, char> : public cc_tokenizer::parser
             
             current_line_offset = i;
             
-            typename cc_tokenizer::String<char>::size_type pos_end = str.find(GRAMMAREND_OF_LINE_MARKER, pos_begin + cc_tokenizer::String<char>::size_type(1));
+            typename cc_tokenizer::String<char>::size_type pos_end = str.find(GRAMMAR_END_OF_LINE_MARKER, pos_begin + cc_tokenizer::String<char>::size_type(1));
             
             if ( pos_end != cc_tokenizer::String<char>::npos ) {
             
@@ -297,9 +297,9 @@ class csv_parser<cc_tokenizer::String<char>, char> : public cc_tokenizer::parser
       {
           cc_tokenizer::string_character_traits<char>::int_type ret = cc_tokenizer::string_character_traits<char>::eof();
 
-	  typename cc_tokenizer::String<char>::size_type pos = get_current_line().find(GRAMMAREND_OFTOKEN_MARKER, current_token_offset + current_token_size);
+	  typename cc_tokenizer::String<char>::size_type pos = get_current_line().find(GRAMMAR_END_OF_TOKEN_MARKER, current_token_offset + current_token_size);
 
-          // Because the last token does'nt have the GRAMMAREND_OFTOKEN_MARKER
+          // Because the last token does'nt have the GRAMMAR_END_OF_TOKEN_MARKER
           if (pos == cc_tokenizer::String<char>::npos)
 	  {
 	      pos = get_current_line().size();
@@ -315,7 +315,7 @@ class csv_parser<cc_tokenizer::String<char>, char> : public cc_tokenizer::parser
 	  }
 
 	  current_token_offset = current_token_offset + current_token_size;
-	  current_token_size = pos - current_token_offset + cc_tokenizer::String<char>(GRAMMAREND_OFTOKEN_MARKER).size();
+	  current_token_size = pos - current_token_offset + cc_tokenizer::String<char>(GRAMMAR_END_OF_TOKEN_MARKER).size();
 	  //current_token_number = current_token_number + cc_tokenizer::string_character_traits<char>::int_type(1);
 
 	  return ~ret;
@@ -323,7 +323,7 @@ class csv_parser<cc_tokenizer::String<char>, char> : public cc_tokenizer::parser
 
       cc_tokenizer::String<char> get_current_token(void) 
       {
-          return cc_tokenizer::String<char>(get_current_line().data() + current_token_offset, current_token_size - cc_tokenizer::String<char>(GRAMMAREND_OFTOKEN_MARKER).size());
+          return cc_tokenizer::String<char>(get_current_line().data() + current_token_offset, current_token_size - cc_tokenizer::String<char>(GRAMMAR_END_OF_TOKEN_MARKER).size());
       }
 
       cc_tokenizer::string_character_traits<char>::int_type get_total_number_of_tokens(void)

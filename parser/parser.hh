@@ -5,8 +5,8 @@
 
 #include "../String/src/String.hh"
 
-#ifndef		CCTOKENIZER_PARSER_HH
-#define		CCTOKENIZER_PARSER_HH
+#ifndef		CC_TOKENIZER_PARSER_HH
+#define		CC_TOKENIZER_PARSER_HH
 
 namespace cc_tokenizer 
 {
