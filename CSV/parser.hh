@@ -1,5 +1,5 @@
 /* CSV/parser.hh
-   Written by, Sohail Qayum Malik[sqm@hackers.pk] */
+   Written by, Sohail Qayum Malik */
 
 #include "../parser/parser.hh" 
 

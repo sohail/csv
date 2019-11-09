@@ -1,5 +1,5 @@
 /* functions/cooked_rand.cc
-   Written by, Sohail Qayum Malik[sqm@hackers.pk] */
+   Written by, Sohail Qayum Malik */
 
 #include "cooked_rand.hh"
 

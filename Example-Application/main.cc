@@ -1,5 +1,5 @@
 // Example-Application/main.cc
-// Written by, Sohail Qayum Malik[sqm@hackers.pk]
+// Written by, Sohail Qayum Malik
 
 #include "main.hh"
 

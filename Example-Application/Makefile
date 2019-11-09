@@ -1,5 +1,5 @@
 # Makefile
-# Written by, Sohail Qayum Malik[sqm@cyberian.pk]
+# Written by, Sohail Qayum Malik
 
 # Because I forget often, # make CPPFLAGS=/DALA_DEBUGFLAG
 

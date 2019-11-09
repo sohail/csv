@@ -1,5 +1,5 @@
 /* ala_exception/ala_exception.hh
-   Written by, Sohail Qayum Malik[sqm@hackers.pk] */
+   Written by, Sohail Qayum Malik */
 
 #include <exception>
 #include "../String/src/String.hh"

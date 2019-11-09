@@ -1,5 +1,5 @@
 /* functions/cooked_read.hh
-   Written by, Sohail Qayum Malik[sqm@hackers.pk] */
+   Written by, Sohail Qayum Malik */
 
 #include <iostream>
 #include <fstream>

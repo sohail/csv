@@ -1,5 +1,5 @@
 /* parser/parser.hh
-   Written by, Sohail Qayum Malik[sqm@hackers.pk] */
+   Written by, Sohail Qayum Malik */
 
 /* A general purpose parser interface */
 
