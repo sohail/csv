@@ -8,7 +8,7 @@ int main(int argc, char* argv[])
     cc_tokenizer::String<char> csv = cooked_read<char>("Example-Application/data.csv");
     cc_tokenizer::csv_parser<cc_tokenizer::String<char>, char> parser(csv);
 			
-//#ifdef	CSV_EXAMPLE_APPLICATION	
+#ifdef	CSV_EXAMPLE_APPLICATION	
     cc_tokenizer::string_character_traits<char>::int_type i, j;
     try
     {   
@@ -52,7 +52,7 @@ int main(int argc, char* argv[])
     {
         std::cout<<e.what()<<std::endl;
     }
-//#endif
+#endif
 
 #ifdef 	CSV_EXAMPLE_APPLICATION_FUTURE_PRIVATE_METHODS
     try 

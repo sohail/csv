@@ -6,14 +6,14 @@
 #include "../String/src/String.hh"
 
 /*
-    The public interface should be as such that menthods like 
+    The public interface should be as such that methods like 
         get_total_number_of_lines, 
-        get_total_number_of_tokens(), 
-        get_line_by_number(), 
-        get_token_by_number(), 
-        get_current_line(),
-        get_current_token()
-    should be made public. Every thing else should be made private and not available publicly
+        get_total_number_of_tokens, 
+        get_line_by_number, 
+        get_token_by_number, 
+        get_current_line,
+        get_current_token
+    should be made public. Every thing else is to be made private and not available publicly at all
 */
 
 #ifndef		CC_TOKENIZER_PARSER_HH
