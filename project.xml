@@ -13,8 +13,8 @@
     <PropertyGroup>
         <ConfigurationType>Application</ConfigurationType>
         <!-- <OutputType>Exe</OutputType> -->       
-        <!-- <BaseOutputPath>Example-Application</BaseOutputPath> -->
-        <!-- <OutputPath>Example-Application</OutputPath> -->
+        <!-- <BaseOutputPath>Example-Application-1</BaseOutputPath> -->
+        <!-- <OutputPath>Example-Application-1</OutputPath> -->
         <!-- <AssemblyName>main</AssemblyName> -->
         <TargetName>main</TargetName>
         <PlatformToolset>v141</PlatformToolset>
@@ -22,16 +22,16 @@
     <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
     <ItemDefinitionGroup>
         <ClCompile>
-            <PreprocessorDefinitions Condition="'$(CSVPreprocessorDefinitions)'=='yes'">CSV_EXAMPLE_APPLICATION</PreprocessorDefinitions>
+            <PreprocessorDefinitions Condition="'$(CSVPreprocessorDefinitions)'=='yes'">CSV_EXAMPLE_APPLICATION_ONE;CSV_NOT_ALLOW_EMPTY_TOKENS</PreprocessorDefinitions>
         </ClCompile>
     </ItemDefinitionGroup>
     <ItemGroup>        
         <ClCompile Include="lib/sundry/cooked_rand.cc" />
         <ClCompile Include="lib/sundry/cooked_read.cc" />        
-        <ClCompile Include="Example-Application/main.cc" />        
+        <ClCompile Include="Example-Application-1/main.cc" />        
     </ItemGroup>
     <ItemGroup>        
-        <ClInclude Include="Example-Application/main.hh" />
+        <ClInclude Include="Example-Application-1/main.hh" />
     </ItemGroup>
     <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Targets" />
     <Target Name="move" AfterTargets="AfterBuild" Condition="'$(ConfigurationType)'=='Application'">

@@ -17,6 +17,11 @@ class csv_parser<cc_tokenizer::String<char>, char> : public cc_tokenizer::parser
 {
    String<char> str;
 
+   // GRAMMAR_END_OF_TOKEN_MARKER
+   String<char> geotm;
+   // GRAMMAR_END_OF_TOKEN_MARKER_SIZE
+   String<char>::size_type geotms;
+
    // Line related
    typename cc_tokenizer::string_character_traits<char>::int_type current_line_number;
    typename cc_tokenizer::string_character_traits<char>::int_type total_number_of_lines;
@@ -31,7 +36,7 @@ class csv_parser<cc_tokenizer::String<char>, char> : public cc_tokenizer::parser
    
    public:
    
-      csv_parser() : str()
+      csv_parser() : str(), geotm(), geotms(0)
 	  {
           // Line related
           current_line_number = cc_tokenizer::string_character_traits<char>::int_type(0);
@@ -46,7 +51,7 @@ class csv_parser<cc_tokenizer::String<char>, char> : public cc_tokenizer::parser
 	 	  current_token_size = cc_tokenizer::String<char>::size_type(0);
       }
       
-      csv_parser(String<char>& ref) : str(ref)
+      csv_parser(String<char>& ref) : str(ref), geotm(), geotms(0)
 	  {
           // Line related
           current_line_number = cc_tokenizer::string_character_traits<char>::int_type(0);
@@ -62,9 +67,33 @@ class csv_parser<cc_tokenizer::String<char>, char> : public cc_tokenizer::parser
 	 	  total_number_of_tokens = cc_tokenizer::string_character_traits<char>::int_type(0);
 	 	  get_total_number_of_tokens();
       }
+
+	  // geotm  GRAMMAR_END_OF_TOKEN_MARKER
+	  // geotms GRAMMAR_END_OF_TOKEN_MARKER_SIZE
+	  csv_parser(String<char>& ref, String<char> geotm, String<char>::size_type geotms = 0) : str(ref), geotm(geotm), geotms(geotms)
+	  {
+		  //std::cout<<"--> "<<str.c_str()<<" -- "<<geotms<<std::endl;
+
+		   // Line related
+          current_line_number = cc_tokenizer::string_character_traits<char>::int_type(0);
+          current_line_offset = cc_tokenizer::String<char>::size_type(0);
+          current_line_size = cc_tokenizer::String<char>::size_type(0);
+	 	  total_number_of_lines = cc_tokenizer::string_character_traits<char>::int_type(0);
+          get_total_number_of_lines();
+
+	 	  // Token related
+	 	  current_token_number = cc_tokenizer::string_character_traits<char>::int_type(0);
+	 	  current_token_offset = cc_tokenizer::String<char>::size_type(0);
+          current_token_size = cc_tokenizer::String<char>::size_type(0);
+	 	  total_number_of_tokens = cc_tokenizer::string_character_traits<char>::int_type(0);
+	 	  get_total_number_of_tokens();
+	  }
       
       cc_tokenizer::String<char> get_current_line(void) 
-      {   
+      {
+		  cc_tokenizer::String<char> line = cc_tokenizer::String<char>(str.data() + current_line_offset, current_line_size);
+
+		  typename cc_tokenizer::String<char>::size_type pos_begin = line.find(GRAMMAR_END_OF_LINE_MARKER, 0);	
           /* 
 	      TODO, put the correct size of GRAMMREND_OF_LINE_MARKER here instead of 1 
 	   	  */ 
@@ -73,8 +102,17 @@ class csv_parser<cc_tokenizer::String<char>, char> : public cc_tokenizer::parser
 //#ifdef	_WIN32
 //		  return cc_tokenizer::String<char>(str.data() + current_line_offset, current_line_size - 1);
 //#else
-		  return cc_tokenizer::String<char>(str.data() + current_line_offset, current_line_size - GRAMMAR_END_OF_LINE_MARKER_SIZE); 	
-//#endif								  
+		  //return cc_tokenizer::String<char>(str.data() + current_line_offset, current_line_size - GRAMMAR_END_OF_LINE_MARKER_SIZE); 			  
+//#endif
+		  if (pos_begin != cc_tokenizer::String<char>::npos)
+		  {
+			  return cc_tokenizer::String<char>(str.data() + current_line_offset, current_line_size - GRAMMAR_END_OF_LINE_MARKER_SIZE); 
+		  }
+		  else
+		  {
+			  return cc_tokenizer::String<char>(str.data() + current_line_offset, current_line_size); 
+		  }
+		  									  
       }
 
       cc_tokenizer::string_character_traits<char>::int_type remove_line_by_number(cc_tokenizer::string_character_traits<char>::int_type n)
@@ -234,7 +272,18 @@ class csv_parser<cc_tokenizer::String<char>, char> : public cc_tokenizer::parser
 	    	  ret = ~ret;
 	 	  }
 		  else
-		  {			  
+		  {	
+			  if ((str.size() - (current_line_offset + current_line_size)) > 0)
+			  {	
+				  current_line_offset = current_line_offset + current_line_size;
+				  current_line_size = str.size() - current_line_offset;
+
+				  //std::cout<<"--------------> "<<current_line_size<<std::endl;
+
+				  reset(TOKENS);
+
+			  	  ret = ~ret;
+		      }  
 		  }
 		  
 	 	  return ret;
@@ -316,7 +365,17 @@ class csv_parser<cc_tokenizer::String<char>, char> : public cc_tokenizer::parser
           cc_tokenizer::string_character_traits<char>::int_type ret = cc_tokenizer::string_character_traits<char>::eof();
 
 		  // Find the end of token marker, the GRAMMAR_END_OF_TOKEN_MARKER	
-	  	  typename cc_tokenizer::String<char>::size_type pos = get_current_line().find(GRAMMAR_END_OF_TOKEN_MARKER, current_token_offset + current_token_size);
+	  	  typename cc_tokenizer::String<char>::size_type pos = 0;
+
+		  if (geotm.size()) 
+		  {
+			  //std::cout<<get_current_line().c_str()<<std::endl;
+			  pos = get_current_line().find(geotm, current_token_offset + current_token_size);
+		  }
+		  else 
+		  {		
+			  pos = get_current_line().find(GRAMMAR_END_OF_TOKEN_MARKER, current_token_offset + current_token_size);
+		  }
 
           // Because the last token does'nt have the GRAMMAR_END_OF_TOKEN_MARKER
           if (pos == cc_tokenizer::String<char>::npos)
@@ -334,22 +393,32 @@ class csv_parser<cc_tokenizer::String<char>, char> : public cc_tokenizer::parser
 	  	  }*/
 
 	  	  current_token_offset = current_token_offset + current_token_size;
-	  	  current_token_size = pos - current_token_offset + GRAMMAR_END_OF_TOKEN_MARKER_SIZE;
+		  if (geotm.size())
+		  {
+			  current_token_size = pos - current_token_offset + geotm.size();
+		  }	
+		  else
+		  {				  		  	
+	  	  	   current_token_size = pos - current_token_offset + GRAMMAR_END_OF_TOKEN_MARKER_SIZE;
+		  }
 
 		  /* 
 		  	 Token size atleast equals to the size of GRAMMAR_END_OF_TOKEN_MARKER_SIZE, token atleast has the GRAMMAR_END_OF_TOKEN_MARKER
 		     End result is that before using the token, check its size aka get_current_token().size()
 		   */ 			 
 		  if (current_token_size)
-		  {			  
+		  {	
+#ifdef CSV_NOT_ALLOW_EMPTY_TOKENS			  		  
 			  // Only want to count legit tokens, tokens which not include the END_OF_TOKEN_MARKER(they are implied to be an empty tokens)
 			  // The idea is to use the methods like get_line_by_number(), get_token_by_number() etc and the caller will provide the number of line/token to retrieve but even before that caller has to know how many legit token/lines are there, for all this the counter gets incremented only for legit tokens
-			  // If caller is going through all the tokens/lines one by one as in the case of methods go_to_next_token and go_to_next_line and then retrieve them subsequently by calling get_current_line() or get_current_token() then it can be better for the caller to call the size() method on them before using them  	
-			  if (current_token_size > GRAMMAR_END_OF_TOKEN_MARKER_SIZE)
+			  // If caller is going through all the tokens/lines one by one as in the case of methods go_to_next_token and go_to_next_line and then retrieve them subsequently by calling get_current_line() or get_current_token() then it can be better for the caller to call the size() method on them before using them			  			  			  			  			  							  			  
+			  if ((geotm.size() && (geotm.size() < current_token_size)) || (!geotm.size() && (current_token_size > GRAMMAR_END_OF_TOKEN_MARKER_SIZE)))
 			  {
+#endif				  
 			  	  current_token_number = current_token_number + 1;
+#ifdef	CSV_NOT_ALLOW_EMPTY_TOKENS					
 			  }		
-
+#endif			  
 			  ret = ~ret;
 		  }
 		 		  		  	  		  	
@@ -360,8 +429,16 @@ class csv_parser<cc_tokenizer::String<char>, char> : public cc_tokenizer::parser
 	  // Use get_current_token().size() to find out if the token is empty  	
       cc_tokenizer::String<char> get_current_token(void) 
       {
+		  if (!geotm.size())
+		  {
 		  // Returned token does not include the GRAMMR_END_OF_TOKEN_MARKER
-          return cc_tokenizer::String<char>(get_current_line().data() + current_token_offset, current_token_size - GRAMMAR_END_OF_TOKEN_MARKER_SIZE);
+          	  return cc_tokenizer::String<char>(get_current_line().data() + current_token_offset, current_token_size - GRAMMAR_END_OF_TOKEN_MARKER_SIZE);
+		  }
+		  else
+		  {
+			  return cc_tokenizer::String<char>(get_current_line().data() + current_token_offset, current_token_size - geotm.size());
+		  }
+		  
       }
 
       cc_tokenizer::string_character_traits<char>::int_type get_total_number_of_tokens(void)

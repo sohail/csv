@@ -5,3 +5,5 @@
 #include "../lib/sundry/cooked_read.hh"
 #include "../src/parser.hh"
 
+#include "../lib/string/src/String.hh"
+
