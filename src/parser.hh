@@ -246,6 +246,7 @@ class csv_parser<cc_tokenizer::String<char>, char> : public cc_tokenizer::parser
 
 	 	  typename cc_tokenizer::String<char>::size_type pos_begin = str.find(GRAMMAR_END_OF_LINE_MARKER, current_line_offset + current_line_size);
 
+		  // End of line marker found		
 	 	  if (pos_begin != cc_tokenizer::String<char>::npos) 
 	 	  {
 	    	  current_line_offset = current_line_offset + current_line_size;
@@ -271,12 +272,14 @@ class csv_parser<cc_tokenizer::String<char>, char> : public cc_tokenizer::parser
 			  			  
 	    	  ret = ~ret;
 	 	  }
+		  // End of line marker was not found 
 		  else
 		  {	
 			  if ((str.size() - (current_line_offset + current_line_size)) > 0)
 			  {	
 				  current_line_offset = current_line_offset + current_line_size;
 				  current_line_size = str.size() - current_line_offset;
+				  current_line_number = current_line_number + 1;
 
 				  //std::cout<<"--------------> "<<current_line_size<<std::endl;
 
