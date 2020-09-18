@@ -6,8 +6,14 @@
 #ifndef		CC_TOKENIZER_CSV_PARSER_H
 #define		CC_TOKENIZER_CSV_PARSER_H
 
-#define		GRAMMAR_END_OF_TOKEN_MARKER	","
-#define		GRAMMAR_END_OF_TOKEN_MARKER_SIZE 1 
+#ifndef     GRAMMAR_END_OF_TOKEN_MARKER
+#define		GRAMMAR_END_OF_TOKEN_MARKER     ","
+#endif
+
+#ifndef     GRAMMAR_END_OF_TOKEN_MARKER_SIZE
+#define		GRAMMAR_END_OF_TOKEN_MARKER_SIZE    1
+#endif
+
 /* On a Windows machine it is "\n\r" */
 #define		GRAMMAR_END_OF_LINE_MARKER	"\n"
 #define		GRAMMAR_END_OF_LINE_MARKER_SIZE	1
