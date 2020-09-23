@@ -58,7 +58,7 @@ class csv_parser<cc_tokenizer::String<char>, char> : public cc_tokenizer::parser
           current_line_offset = cc_tokenizer::String<char>::size_type(0);
           current_line_size = cc_tokenizer::String<char>::size_type(0);
 	 	  total_number_of_lines = cc_tokenizer::string_character_traits<char>::int_type(0);
-          get_total_number_of_lines();
+          get_total_number_of_lines();	  
 
 	 	  // Token related
 	 	  current_token_number = cc_tokenizer::string_character_traits<char>::int_type(0);
@@ -151,9 +151,9 @@ class csv_parser<cc_tokenizer::String<char>, char> : public cc_tokenizer::parser
       cc_tokenizer::String<char> get_line_by_number(cc_tokenizer::string_character_traits<char>::int_type n)
       {
           cc_tokenizer::String<char> ret;
-
+	   	  
           if (total_number_of_lines && n && n <= total_number_of_lines)
-	  	  {
+	  	  {		
 	      	  if (n == current_line_number)
 	      	  {
 	        	  ret = get_current_line();
@@ -220,24 +220,29 @@ class csv_parser<cc_tokenizer::String<char>, char> : public cc_tokenizer::parser
       
       cc_tokenizer::string_character_traits<char>::int_type get_total_number_of_lines(void) 
       {
-         if (str.size()) 
-	 {
-            cc_tokenizer::string_character_traits<char>::int_type cln = current_line_number;
-            cc_tokenizer::String<char>::size_type clo = current_line_offset;
-            cc_tokenizer::String<char>::size_type cls = current_line_size;
+          if (str.size())
+		  {
+		 	  cc_tokenizer::string_character_traits<char>::int_type cln = current_line_number;
+			  cc_tokenizer::String<char>::size_type clo = current_line_offset;
+			  cc_tokenizer::String<char>::size_type cls = current_line_size;
 
-	    reset(LINES);
-
-            while ( go_to_next_line() != cc_tokenizer::string_character_traits<char>::eof() ) {
-               total_number_of_lines = total_number_of_lines + cc_tokenizer::string_character_traits<char>::int_type(1);            
-            }
+			  /* Never call method get_total_number_of_lines() from the following method */	
+			  //reset(LINES);
+			  current_line_number = 0;
+			  current_line_offset = 0;
+			  current_line_size = 0;
+	    		
+              while (go_to_next_line() != cc_tokenizer::string_character_traits<char>::eof())
+			  {
+				  total_number_of_lines = total_number_of_lines + cc_tokenizer::string_character_traits<char>::int_type(1);            
+              }
             
-            current_line_number = cln;
-            current_line_offset = clo;
-            current_line_size = cls;
-         }
+              current_line_number = cln;
+              current_line_offset = clo;
+              current_line_size = cls;
+          }
          
-         return total_number_of_lines;
+          return total_number_of_lines;
       }
 
       cc_tokenizer::string_character_traits<char>::int_type go_to_next_line(void) 
@@ -269,6 +274,8 @@ class csv_parser<cc_tokenizer::String<char>, char> : public cc_tokenizer::parser
 			  //std::cout<<"--> "<<current_line_size<<std::endl;
 
 	    	  reset(TOKENS);
+
+			  get_total_number_of_tokens();
 			  			  
 	    	  ret = ~ret;
 	 	  }
@@ -284,6 +291,8 @@ class csv_parser<cc_tokenizer::String<char>, char> : public cc_tokenizer::parser
 				  //std::cout<<"--------------> "<<current_line_size<<std::endl;
 
 				  reset(TOKENS);
+
+				  get_total_number_of_tokens();
 
 			  	  ret = ~ret;
 		      }  
@@ -486,8 +495,11 @@ class csv_parser<cc_tokenizer::String<char>, char> : public cc_tokenizer::parser
       {
           cc_tokenizer::String<char> ret;
 
+		  //std::cout<<"SONI -> get_token_by_number() total_number_of_tokens = "<<total_number_of_tokens<<std::endl;
+
 	  	  if (current_line_number && total_number_of_tokens && n && n <= total_number_of_tokens)	   
 	  	  {
+			  //std::cout<<"SONI -> get_token_by_number() "<<std::endl;		
 	      	  if (current_token_number == n)
 	      	  {
 	          	  ret = get_current_token();
@@ -564,7 +576,7 @@ class csv_parser<cc_tokenizer::String<char>, char> : public cc_tokenizer::parser
 	      current_token_number = ctn;
 	      total_number_of_tokens = tnt;
 	      current_token_offset = cto;
-              current_token_size = cts;
+		  current_token_size = cts;
 
 	      return token;
 	  }
@@ -580,7 +592,10 @@ class csv_parser<cc_tokenizer::String<char>, char> : public cc_tokenizer::parser
 	          	  current_line_offset = cc_tokenizer::string_character_traits<char>::size_type(0);
 		  		  current_line_size = cc_tokenizer::string_character_traits<char>::size_type(0);
 		  		  current_line_number = cc_tokenizer::string_character_traits<char>::int_type(0);
-		  		  total_number_of_lines = cc_tokenizer::string_character_traits<char>::int_type(0);
+			      /*
+				     Remeber to never ever call this method from the get_total_number_of_lines method	     		
+			       */				 		
+		  		  total_number_of_lines = get_total_number_of_lines(); /*cc_tokenizer::string_character_traits<char>::int_type(0)*/;
 	      	  break;
 	      	  case TOKENS:
 	          	  current_token_offset = cc_tokenizer::string_character_traits<char>::size_type(0);
