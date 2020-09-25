@@ -148,6 +148,12 @@ class csv_parser<cc_tokenizer::String<char>, char> : public cc_tokenizer::parser
 		  return current_line_number;
 	  }
 
+	  /*
+	  	TODO(or not to do)
+		If line number is not as same as the current line number then all the line related variables are reassigned values corresponding to the line at that specific line number
+		This is not good if you are in a loop(using go_to_next_line method), don't call this method in the loop to traverse all lines one at a time
+		So "what to do" here, it can be that provide way that while in a loop and after calling this method the loop gain back its state and go on looping 
+	   */	
       cc_tokenizer::String<char> get_line_by_number(cc_tokenizer::string_character_traits<char>::int_type n)
       {
           cc_tokenizer::String<char> ret;
@@ -163,7 +169,7 @@ class csv_parser<cc_tokenizer::String<char>, char> : public cc_tokenizer::parser
 	          	  cc_tokenizer::string_character_traits<char>::int_type i = cc_tokenizer::string_character_traits<char>::int_type(0);
 
 	          	  reset(LINES);
-
+										
 		  		  while (go_to_next_line() != cc_tokenizer::string_character_traits<char>::eof())
 		  		  {
                       i = i + cc_tokenizer::string_character_traits<char>::int_type(1); 
@@ -595,7 +601,7 @@ class csv_parser<cc_tokenizer::String<char>, char> : public cc_tokenizer::parser
 			      /*
 				     Remeber to never ever call this method from the get_total_number_of_lines method	     		
 			       */				 		
-		  		  total_number_of_lines = get_total_number_of_lines(); /*cc_tokenizer::string_character_traits<char>::int_type(0)*/;
+		  		  total_number_of_lines = get_total_number_of_lines(); /*cc_tokenizer::string_character_traits<char>::int_type(0)*/;				   		
 	      	  break;
 	      	  case TOKENS:
 	          	  current_token_offset = cc_tokenizer::string_character_traits<char>::size_type(0);
