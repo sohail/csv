@@ -237,6 +237,8 @@ class csv_parser<cc_tokenizer::String<char>, char> : public cc_tokenizer::parser
 			  current_line_number = 0;
 			  current_line_offset = 0;
 			  current_line_size = 0;
+
+			  total_number_of_lines = 0;
 	    		
               while (go_to_next_line() != cc_tokenizer::string_character_traits<char>::eof())
 			  {
